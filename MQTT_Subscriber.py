@@ -5,6 +5,9 @@ SERVER = "comp3310.ddns.net"
 PORT = 1883
 USERNAME = "students"
 PASSWORD = "33106331"
+SLOW = ["counter/slow/q0", "counter/slow/q1", "counter/slow/q2"]
+FAST = ["counter/fast/q0", "counter/fast/q1", "counter/fast/q2"]
+
 
 # The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, rc):
@@ -14,7 +17,7 @@ def on_connect(client, userdata, flags, rc):
       print("Error with code: " + str(rc))
    # Subscribing in on_connect() means that if we lose the connection and
    # reconnect then subscriptions will be renewed.
-   client.subscribe("$SYS/#")
+   # client.subscribe("$SYS/#")
 
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
@@ -32,7 +35,7 @@ client.on_log = on_log
 client.username_pw_set(USERNAME, PASSWORD)
 client.connect(SERVER, PORT, 60)
 
-client.subscribe("counter/slow", 0)
+client.subscribe(SLOW[1], 0)
 
 time.sleep(0)
 # client.disconnect
