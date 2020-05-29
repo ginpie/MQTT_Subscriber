@@ -5,6 +5,7 @@ SERVER = "comp3310.ddns.net"
 PORT = 1883
 USERNAME = "students"
 PASSWORD = "33106331"
+CLIENT_ID="3310-u6743886"
 SLOW = ["counter/slow/q0", "counter/slow/q1", "counter/slow/q2"]
 FAST = ["counter/fast/q0", "counter/fast/q1", "counter/fast/q2"]
 
@@ -17,7 +18,9 @@ def on_connect(client, userdata, flags, rc):
       print("Error with code: " + str(rc))
    # Subscribing in on_connect() means that if we lose the connection and
    # reconnect then subscriptions will be renewed.
-   # client.subscribe("$SYS/#")
+
+def on_disconnect(clietn, userdata, rc):
+   print("client disconnected ok")
 
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
@@ -26,16 +29,19 @@ def on_message(client, userdata, msg):
 def on_log(client, userdata, level, buf):
    print("log: " + buf)
 
-client = mqtt.Client(client_id="3310-u6743886")
+def on_publish(client, userdata, mid):
+   print("In on_pub callback mid= ", mid)
 
+
+client = mqtt.Client(CLIENT_ID)
 client.on_connect = on_connect
 client.on_message = on_message
-client.on_log = on_log
+# client.on_log = on_log
 
 client.username_pw_set(USERNAME, PASSWORD)
-client.connect(SERVER, PORT, 60)
+client.connect(SERVER, PORT)
 
-client.subscribe(SLOW[1], 0)
+client.subscribe(SLOW[0], 0)
 
 time.sleep(0)
 # client.disconnect
