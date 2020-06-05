@@ -39,10 +39,7 @@ def on_log(client, userdata, level, buf):
    print("log: " + buf )
 
 def on_publish(client, userdata, mid):
-   print("In on_pub callback mid= ", mid)
-
-def writeCSV(csvfile):
-   writ = csv.writer(csvfile)
+   print("on_pub callback mid= ", mid)
 
 # subscribe to one of the topics at a time
 for i in range(5,6):
@@ -59,16 +56,17 @@ for i in range(5,6):
    lv = i%3
    client.subscribe(topic, qos=lv)
    client.subscribe("$SYS/#")
-   
+   # client.subscribe("studentreport/u6743886/#", 2)
+
    client.loop_start()
-   time.sleep(300)
+   time.sleep(320)
    client.loop_stop()
    
    client.unsubscribe(topic)
    
 client.disconnect()
 
-with open('sys_trial4.csv', 'w', newline='') as csvfile:
+with open('test.csv', 'w', newline='') as csvfile:
    writ = csv.writer(csvfile)
    for i in range(0, len(list)):
       writ.writerow(list[i])
